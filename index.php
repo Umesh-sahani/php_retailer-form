@@ -1,4 +1,11 @@
 <?php
+
+session_start();
+if (isset($_SESSION['admin'])) {
+	header('Location: dashboard.php');
+	exit();
+}
+
 require_once("database/dbcon.php");
 // define variables and set to empty values
 $usernameErr = $passwordErr = '';
@@ -133,7 +140,7 @@ function test_input($data)
 			<!--------------------------- Left Box ----------------------------->
 			<div class="col-md-6 justify-content-center align-items-center left-box" style="padding: 0px;">
 				<div class="featured-image">
-					<img src="img/photo4.jpg" class="shadow rounded">
+					<img src="img/login1.jpg" class="shadow rounded">
 				</div>
 			</div>
 			<!-------------------- ------ Right Box ---------------------------->

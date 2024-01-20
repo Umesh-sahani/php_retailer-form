@@ -5,7 +5,7 @@ if (!isset($_SESSION['admin'])) {
     header('Location: index.php');
     exit();
 }
-
+require("config/config.php");
 $query = "SELECT * FROM response ORDER BY id DESC";
 $result = mysqli_query($con, $query);
 

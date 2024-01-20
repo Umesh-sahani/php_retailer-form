@@ -6,7 +6,9 @@ if (!isset($_SESSION['admin'])) {
 	header('Location: index.php');
 	exit();
 }
+
 require_once("database/dbcon.php");
+require("config/config.php");
 
 function getrows($table_name, $con, $condition = "")
 {
@@ -44,14 +46,14 @@ mysqli_close($con);
 	<!-- Google Font: Source Sans Pro -->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 	<!-- Font Awesome -->
-	<link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+	<link rel="stylesheet" href="<?php echo BASE_URL ?>plugins/fontawesome-free/css/all.min.css">
 	<!-- Theme style -->
-	<link rel="stylesheet" href="css/adminlte.min.css">
-	<link rel="stylesheet" href="css/custom.css">
+	<link rel="stylesheet" href="<?php echo BASE_URL ?>css/adminlte.min.css">
+	<link rel="stylesheet" href="<?php echo BASE_URL ?>css/custom.css">
 	<!-- website icon -->
-	<link rel="shortcut icon" href="img/avatar.png" type="image/x-icon">
+	<link rel="shortcut icon" href="<?php echo BASE_URL ?>img/avatar.png" type="image/x-icon">
 	<!-- fullCalendar -->
-	<link rel="stylesheet" href="plugins/fullcalendar/main.css">
+	<link rel="stylesheet" href="<?php echo BASE_URL ?>plugins/fullcalendar/main.css">
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -68,9 +70,7 @@ mysqli_close($con);
 			<div class="navbar-nav pl-2">
 
 			</div>
-
-			<?php include("pages/top_nav.php") ?>
-
+			<?php include("pages/top_nav.php"); ?>
 
 		</nav>
 		<!-- /.navbar -->
@@ -106,7 +106,7 @@ mysqli_close($con);
 								<div class="icon">
 									<i class="fas fa-shopping-cart"></i>
 								</div>
-								<a href="view_order.php" class="small-box-footer">
+								<a href="<?php BASE_URL ?>view_order.php" class="small-box-footer">
 									More info <i class="fas fa-arrow-circle-right"></i>
 								</a>
 							</div>
@@ -143,7 +143,7 @@ mysqli_close($con);
 						</div>
 					</div>
 					<hr>
-				
+
 				</div>
 				<!-- /.card -->
 			</section>
@@ -156,15 +156,15 @@ mysqli_close($con);
 	</div>
 	<!-- ./wrapper -->
 	<!-- jQuery -->
-	<script src="plugins/jquery/jquery.min.js"></script>
+	<script src="<?php echo BASE_URL ?>plugins/jquery/jquery.min.js"></script>
 	<!-- Bootstrap 4 -->
-	<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="<?php echo BASE_URL ?>plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 	<!-- AdminLTE App -->
-	<script src="js/adminlte.min.js"></script>
-	<script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+	<script src="<?php echo BASE_URL ?>js/adminlte.min.js"></script>
+	<script src="<?php echo BASE_URL ?>plugins/jquery-ui/jquery-ui.min.js"></script>
 	<!-- fullCalendar 2.2.5 -->
-	<script src="plugins/moment/moment.min.js"></script>
-	<script src="plugins/fullcalendar/main.js"></script>
+	<script src="<?php echo BASE_URL ?>plugins/moment/moment.min.js"></script>
+	<script src="<?php echo BASE_URL ?>plugins/fullcalendar/main.js"></script>
 </body>
 
 </html>

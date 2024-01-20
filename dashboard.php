@@ -1,10 +1,38 @@
 <?php
 session_start();
 
+
 if (!isset($_SESSION['admin'])) {
 	header('Location: index.php');
 	exit();
 }
+require_once("database/dbcon.php");
+
+function getrows($table_name, $con, $condition = "")
+{
+	$sql = "SELECT COUNT(*) as total_rows FROM $table_name";
+
+	if (!empty($condition)) {
+		$sql .= " WHERE $condition";
+	}
+	$result = mysqli_query($con, $sql);
+	if ($result) {
+		$row = mysqli_fetch_assoc($result);
+		$totalRows = $row["total_rows"];
+		return $totalRows;
+	}
+}
+// get all order which puch today
+$conditionToday = "DATE(timestamp) = CURDATE()";
+$totalTodayOrders = getRows("response", $con, $conditionToday);
+// get all time order 
+$totalOrders = getrows("response", $con);
+// get total user registered in table
+$totalUsers = getrows("login", $con);
+
+
+mysqli_close($con);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,6 +50,8 @@ if (!isset($_SESSION['admin'])) {
 	<link rel="stylesheet" href="css/custom.css">
 	<!-- website icon -->
 	<link rel="shortcut icon" href="img/avatar.png" type="image/x-icon">
+	<!-- fullCalendar -->
+	<link rel="stylesheet" href="plugins/fullcalendar/main.css">
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -41,7 +71,7 @@ if (!isset($_SESSION['admin'])) {
 
 			<?php include("pages/top_nav.php") ?>
 
-			
+
 		</nav>
 		<!-- /.navbar -->
 		<!-- Main Sidebar Container -->
@@ -68,44 +98,52 @@ if (!isset($_SESSION['admin'])) {
 				<div class="container-fluid">
 					<div class="row">
 						<div class="col-lg-4 col-6">
-							<div class="small-box card">
+							<div class="small-box bg-danger">
 								<div class="inner">
-									<h3>150</h3>
+									<h3><?php echo $totalOrders; ?></h3>
 									<p>Total Orders</p>
 								</div>
 								<div class="icon">
-									<i class="ion ion-bag"></i>
+									<i class="fas fa-shopping-cart"></i>
 								</div>
-								<a href="#" class="small-box-footer text-dark">More info <i class="fas fa-arrow-circle-right"></i></a>
+								<a href="view_order.php" class="small-box-footer">
+									More info <i class="fas fa-arrow-circle-right"></i>
+								</a>
 							</div>
 						</div>
 
 						<div class="col-lg-4 col-6">
-							<div class="small-box card">
+							<div class="small-box bg-info">
 								<div class="inner">
-									<h3>50</h3>
-									<p>Total Customers</p>
+									<h3><?php echo $totalTodayOrders; ?></h3>
+									<p>Today Orders</p>
 								</div>
 								<div class="icon">
-									<i class="ion ion-stats-bars"></i>
+									<i class="fas fa-shopping-cart"></i>
 								</div>
-								<a href="#" class="small-box-footer text-dark">More info <i class="fas fa-arrow-circle-right"></i></a>
+								<a href="#" class="small-box-footer">
+									More info <i class="fas fa-arrow-circle-right"></i>
+								</a>
 							</div>
 						</div>
 
 						<div class="col-lg-4 col-6">
-							<div class="small-box card">
+							<div class="small-box bg-gradient-success">
 								<div class="inner">
-									<h3>100</h3>
-									<p>Pending</p>
+									<h3><?php echo $totalUsers; ?></h3>
+									<p>User Registrations</p>
 								</div>
 								<div class="icon">
-									<i class="ion ion-person-add"></i>
+									<i class="fas fa-user-plus"></i>
 								</div>
-								<a href="#" class="small-box-footer text-dark">More info <i class="fas fa-arrow-circle-right"></i></a>
+								<a href="#" class="small-box-footer">
+									More info <i class="fas fa-arrow-circle-right"></i>
+								</a>
 							</div>
 						</div>
 					</div>
+					<hr>
+				
 				</div>
 				<!-- /.card -->
 			</section>
@@ -123,6 +161,10 @@ if (!isset($_SESSION['admin'])) {
 	<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 	<!-- AdminLTE App -->
 	<script src="js/adminlte.min.js"></script>
+	<script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+	<!-- fullCalendar 2.2.5 -->
+	<script src="plugins/moment/moment.min.js"></script>
+	<script src="plugins/fullcalendar/main.js"></script>
 </body>
 
 </html>

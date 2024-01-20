@@ -54,12 +54,12 @@ if (!isset($_SESSION['admin'])) {
             <section class="content-header">
                 <div class="container-fluid my-2">
                     <div class="row mb-2">
-                        <div class="col-sm-6">
+                        <div class="col-6">
                             <h4>Order Form</h4>
                         </div>
-                        <!-- <div class="col-sm-6 text-right">
+                        <div class="col-6 text-right">
                             <a href="dashboard.php" class="btn btn-primary btn-sm">Back</a>
-                        </div> -->
+                        </div>
                     </div>
                 </div>
                 <!-- /.container-fluid -->
@@ -71,21 +71,21 @@ if (!isset($_SESSION['admin'])) {
                     <form action="" method="post" id="submit_form" name="submit_form">
                         <div class="card p-0">
                             <div class="card-body p-1">
-                                <div class="container">
-                                    <input type="hidden" name="user_name" value="<?php echo $_SESSION["user_name"]; ?>">
+                                <div class="">
+                                    <input type="hidden" name="user_name" id="user_name" value="<?php echo $_SESSION["user_name"]; ?>">
 
                                     <div class="row">
                                         <div class="col-3">
-                                            <label for="width">Width</label>
+                                            <label for="width" class="col-form-label-sm">Width</label>
                                         </div>
-                                        <div class="col-3">
-                                            <label for="color">Color</label>
+                                        <div class="col-3 pl-0">
+                                            <label for="color" class="col-form-label-sm">Color</label>
                                         </div>
-                                        <div class="col-4">
-                                            <label for="design_name">Design Name</label>
+                                        <div class="col-4 pl-0">
+                                            <label for="design_name" class="col-form-label-sm">Design Name</label>
                                         </div>
-                                        <div class="col-2">
-                                            <label for="quantity">QTY</label>
+                                        <div class="col-2 pl-0">
+                                            <label for="quantity" class="col-form-label-sm">QTY</label>
                                         </div>
                                     </div>
 
@@ -93,16 +93,16 @@ if (!isset($_SESSION['admin'])) {
                                         <?php for ($i = 0; $i < 5; $i++) { ?>
                                             <div class="row mb-1">
                                                 <div class="col-3">
-                                                    <input type="text" name="width[]" class="form-control" placeholder="Width">
+                                                    <input type="text" name="width[]" class="form-control input-field form-control-sm" placeholder="Width">
                                                 </div>
-                                                <div class="col-3">
-                                                    <input type="text" name="color[]" class="form-control" placeholder="Color">
+                                                <div class="col-3 pl-0">
+                                                    <input type="text" name="color[]" class="form-control input-field form-control-sm" placeholder="Color">
                                                 </div>
-                                                <div class="col-4">
-                                                    <input type="text" name="design_name[]" class="form-control" placeholder="Design Name">
+                                                <div class="col-4 pl-0">
+                                                    <input type="text" name="design_name[]" class="form-control input-field form-control-sm" placeholder="Design Name">
                                                 </div>
-                                                <div class="col-2">
-                                                    <input type="text" name="quantity[]" class="form-control" placeholder="QTY" oninput="validateInput(this)">
+                                                <div class="col-2 pl-0">
+                                                    <input type="text" name="quantity[]" class="form-control input-field form-control-sm" placeholder="QTY" oninput="validateInput(this)">
                                                 </div>
                                             </div>
                                         <?php } ?>
@@ -113,21 +113,21 @@ if (!isset($_SESSION['admin'])) {
                             </div>
 
                         </div>
+                        <div class="pb-5 pt-3">
+                            <button type="submit" class="btn btn-primary" id="submit">Create</button>
+                            <a href="dashboard.php" class="btn btn-outline-dark ml-3">Cancel</a>
+                        </div>
+                    </form>
                 </div>
-                <div class="pb-5 pt-3">
-                    <button type="submit" class="btn btn-primary" id="submit">Create</button>
-                    <a href="dashboard.php" class="btn btn-outline-dark ml-3">Cancel</a>
-                </div>
-                </form>
 
+            </section>
         </div>
         <!-- /.card -->
-        </section>
         <!-- /.content -->
-    </div>
-    <!-- /.content-wrapper -->
-    <!-- include footer page -->
-    <?php include("pages/footer.inc.php") ?>
+
+        <!-- /.content-wrapper -->
+        <!-- include footer page -->
+        <?php include("pages/footer.inc.php") ?>
 
     </div>
     <!-- ./wrapper -->
@@ -141,9 +141,19 @@ if (!isset($_SESSION['admin'])) {
     <script src="plugins/sweetalert2/sweetalert2.min.js"></script>
     <script>
         $(document).ready(function() {
+            $(document).on('blur', '.input-field', function() {
+                var input_field = $(this).val().trim();
+                if (input_field !== "") {
+                    var row = $(this).closest('.row');
+                    row.find('input').prop('required', true);
+                } else {
+                    var row = $(this).closest('.row');
+                    row.find('input').prop('required', false);
+                }
+            });
+
             $("form").on("submit", async function(e) {
                 e.preventDefault();
-                var allFormData = [];
                 // $("#submit").prop("disabled", true);
                 // calling ajax to save record
 
@@ -160,50 +170,68 @@ if (!isset($_SESSION['admin'])) {
                 //     $("#submit").prop("disabled", false);
                 //     return;
                 // }
-
-                $("#inputRows .input-row").each(function() {
+                var allFormData = [];
+                $("#inputRows .row").each(function() {
                     var formData = {
+                        user_name: $("#user_name").val(),
                         width: $(this).find("input[name='width[]']").val(),
                         color: $(this).find("input[name='color[]']").val(),
                         design_name: $(this).find("input[name='design_name[]']").val(),
                         quantity: $(this).find("input[name='quantity[]']").val(),
                     };
+                    if (formData.user_name != "" && formData.width != "" && formData.width != "" && formData.color != "" && formData.design_name != "" && formData.quantity != "") {
+                        allFormData.push(formData);
+                    }
 
-                    allFormData.push(formData);
+
                 });
-                console.log(allFormData)
 
+                console.log(allFormData);
+                console.log(allFormData.length);
+                if (allFormData.length > 0) {
+                    try {
+                        $.ajax({
+                            url: "ajax/save_record.php",
+                            type: "POST",
+                            data: {
+                                data: JSON.stringify(allFormData)
+                            },
+                            dataType: "json",
+                            success: function(response) {
+                                $("#submit").prop("disabled", false);
+                                if (response.status == "success") {
+                                    // Reset the form
+                                    $("form")[0].reset();
 
-                try {
-                    $.ajax({
-                        url: "ajax/save_record.php",
-                        type: "POST",
-                        data: {
-                            data: JSON.stringify(formData)
-                        },
-                        dataType: "json",
-                        success: function(response) {
-                            $("#submit").prop("disabled", false);
-                            if (response.status == "success") {
-                                // Reset the form
-                                $("form")[0].reset();
+                                    // Display SweetAlert popup
+                                    Swal.fire({
+                                        title: 'Success!',
+                                        text: 'Data saved successfully.',
+                                        icon: 'success',
+                                        confirmButtonText: 'OK'
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                    
+                                            window.location.href = "view_order.php";
+                                        }
+                                    });
 
-                                // Display SweetAlert popup
-                                Swal.fire({
-                                    title: 'Success!',
-                                    text: 'Data saved successfully.',
-                                    icon: 'success',
-                                    confirmButtonText: 'OK'
-                                });
+                                }
                             }
-                        }
-                    });
+                        });
 
-                } catch (error) {
-                    console.log("Error : " + error);
+                    } catch (error) {
+                        console.log("Error : " + error);
+                    }
+                } else {
+                    Swal.fire({
+                        title: 'Attention!',
+                        text: 'Please Fill At Lease One.',
+                        icon: 'info',
+                        confirmButtonText: 'OK'
+                    });
                 }
 
-                console.log(formData)
 
             });
 

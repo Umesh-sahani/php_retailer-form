@@ -35,7 +35,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" and isset($_POST['login'])) {
 			header('Location: dashboard.php');
 			exit();
 		} else {
-			echo "failed";
 			$passwordErr = "Incorrect password";
 		}
 	} else {
@@ -55,78 +54,129 @@ function test_input($data)
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Retailer Login Page.</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+	<!-- <link rel="stylesheet" href="style.css"> -->
+	<title>Retailer Login Page</title>
 	<!-- Google Font: Source Sans Pro -->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 	<!-- Font Awesome -->
 	<link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
-	<!-- Theme style -->
-	<link rel="stylesheet" href="css/adminlte.min.css">
-	<link rel="stylesheet" href="css/custom.css">
+	<style>
+		body {
+			font-family: 'Poppins', sans-serif;
+			background: #ececec;
+			/* background: #e9aa62; */
+		}
+
+		.right-box {
+			padding: 15px 20px 15px 35px;
+		}
+
+		/*------------ Custom Placeholder ------------*/
+		::placeholder {
+			font-size: 16px;
+		}
+
+		.rounded-4 {
+			border-radius: 15px;
+		}
+
+		.featured-image {
+			position: relative;
+			width: 100%;
+			height: 100%;
+		}
+
+		.featured-image img {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			object-fit: fill;
+			overflow: hidden;
+		}
+
+
+		/*------------ For small screens------------*/
+
+		@media only screen and (max-width: 767px) {
+
+			.box-area {
+				margin: 0 15px;
+			}
+
+			.left-box {
+				height: 175px;
+				overflow: hidden;
+			}
+
+			.right-box {
+				padding: 20px;
+			}
+		}
+	</style>
 </head>
 
-<body class="hold-transition login-page">
-	<div class="login-box">
-		<!-- /.login-logo -->
-		<div class="card card-outline card-primary">
-			<div class="card-header text-center">
-				<a href="#" class="h3">RETAILER FORM LOGIN</a>
+<body>
+	<!----------------------- Main Container -------------------------->
+	<div class="container d-flex justify-content-center align-items-center min-vh-100 col-lg-8">
+		<!----------------------- Login Container -------------------------->
+		<div class="row border rounded-4 p-3 bg-white shadow box-area">
+			<!--------------------------- Left Box ----------------------------->
+			<div class="col-md-6 justify-content-center align-items-center left-box" style="padding: 0px;">
+				<div class="featured-image">
+					<img src="img/photo4.jpg" class="shadow rounded">
+				</div>
 			</div>
-			<div class="card-body">
-				<p class="login-box-msg">Happy to see, your are back.</p>
-				<form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
-					<div class="input-group mb-3">
-						<input type="text" class="form-control <?php echo $usernameErr ? 'is-invalid' : ''; ?>" value="<?php echo $usernameErr?"":$username ?>" id="username" name="username" placeholder="Enter User Name">
-						<div class="input-group-append">
-							<div class="input-group-text">
-								<span class="fas fa-envelope"></span>
-							</div>
-						</div>
-						<?php if ($passwordErr): ?>
-							<div class="invalid-feedback"><?php echo $usernameErr; ?></div>
-						<?php endif; ?>
-					</div>
-					<div class="input-group mb-3">
-						<input type="password" class="form-control <?php echo $passwordErr ? 'is-invalid' : ''; ?>" name="password" id="password" placeholder="Password">
-						<div class="input-group-append">
-							<div class="input-group-text">
-								<span class="fas fa-lock"></span>
-							</div>
-						</div>
-						<?php if ($passwordErr): ?>
-							<div class="invalid-feedback"><?php echo $passwordErr; ?></div>
-						<?php endif; ?>
+			<!-------------------- ------ Right Box ---------------------------->
+			<div class="col-md-6 right-box">
+				<div class="row align-items-center">
+					<div class="">
+						<h2>Welcome, Again</h2>
+						<p style="margin-bottom: 0!important;">We are happy to have you back.</p>
 					</div>
 
-					<div class="row">
-						<div class="col-4">
-							<button type="submit" class="btn btn-primary btn-block" name="login">Login</button>
+					<form class="mt-2" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
+						<div class="form-group mb-3">
+							<label for="username" class="text-black">User Name</label>
+							<input type="text" class="form-control form-control-lg bg-light fs-6 <?php echo $usernameErr ? 'is-invalid' : ''; ?>" value="<?php echo $usernameErr ? "" : $username ?>" id="username" name="username" placeholder="Enter User Name" autocomplete="off" maxlength="255">
+							<?php if ($usernameErr) : ?>
+								<div class="invalid-feedback"><?php echo $usernameErr; ?></div>
+							<?php endif; ?>
 						</div>
-						<!-- /.col -->
+
+
+						<div class="form-group mb-4">
+							<label for="password" class="text-black">Password</label>
+							<input type="password" class="form-control form-control-lg bg-light fs-6 <?php echo $passwordErr ? 'is-invalid' : ''; ?>" placeholder=" Enter Password" name="password" maxlength="255">
+							<?php if ($passwordErr) : ?>
+								<div class="invalid-feedback"><?php echo $passwordErr; ?></div>
+							<?php endif; ?>
+						</div>
+
+						<div class="input-group mb-3">
+							<button type="submit" class="btn btn-lg btn-dark w-100 fs-6" name="login">Sing In</button>
+						</div>
+					</form>
+
+					<div class=" mt-2">
+						<small>Copyright &copy; <span>makeitsimple.</span></small>
 					</div>
-				</form>
-				<!-- <p class="mb-1 mt-3">
-				  		<a href="forgot-password.html">I forgot my password</a>
-					</p>					 -->
+
+				</div>
 			</div>
-			<!-- /.card-body -->
+
 		</div>
-		<!-- /.card -->
 	</div>
-	<!-- ./wrapper -->
-	<!-- jQuery -->
-	<script src="plugins/jquery/jquery.min.js"></script>
-	<!-- Bootstrap 4 -->
-	<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-	<!-- AdminLTE App -->
-	<script src="js/adminlte.min.js"></script>
+
 </body>
 
 </html>

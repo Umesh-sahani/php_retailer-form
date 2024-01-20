@@ -9,22 +9,20 @@
         <!-- Sidebar user (optional) -->
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                <!-- Add icons to the links using the .nav-icon class
-								with font-awesome or any other icon font library -->
                 <li class="nav-item">
-                    <a href="index.php" class="nav-link">
+                    <a href="dashboard.php" class="nav-link <?php  echo $_SERVER['REQUEST_URI'] == "/retailer/dashboard.php" ? "active":""; ?>">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>Dashboard</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="order_form.php" class="nav-link">
+                    <a href="order_form.php" class="nav-link <?php  echo $_SERVER['REQUEST_URI'] == "/retailer/order_form.php" ? "active":""; ?>">
                         <i class="nav-icon fas fa-file-alt"></i>
                         <p>ORDER FORM</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="view_order.php" class="nav-link">
+                    <a href="view_order.php" class="nav-link <?php  echo $_SERVER['REQUEST_URI'] == "/retailer/view_order.php" ? "active":""; ?>">
                         <i class="nav-icon fas fa-file-alt"></i>
                         <p>VIEW ORDER</p>
                     </a>

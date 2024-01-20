@@ -7,7 +7,7 @@ require("../database/dbcon.php");
 $data = json_decode($_POST['data'], true);
 
 if ($data) {
-    // Assuming your formData contains fields like 'name' and 'value'
+    // Assuming your formData contains fields like 'user_name', 'width', 'color', 'design_name', and 'quantity'
     // Adjust the column names accordingly based on your database structure
 
     $columns = [];
@@ -16,31 +16,40 @@ if ($data) {
 
     // Loop through the array and prepare data for the query
     foreach ($data as $item) {
-        $name = mysqli_real_escape_string($con, $item['name']);
-        $value = mysqli_real_escape_string($con, $item['value']);
+        $rowValues = [];
+        foreach ($item as $name => $value) {
+            $columns[$name] = mysqli_real_escape_string($con, $name);
+            $rowValues[] = mysqli_real_escape_string($con, $value);
 
-        $columns[] = $name;
-        $values[] = $value;
-        if($name == "quantity"){
-            $types .= "i";
-        }else{
-            $types .= "s";
+            // Assuming 'quantity' is an integer, adjust the condition as needed
+            if ($name == "quantity") {
+                $types .= "i";
+            } else {
+                $types .= "s";
+            }
         }
-        
+        $values[] = $rowValues;
     }
 
     // Build the dynamic query
-    $query = "INSERT INTO `response` (" . implode(', ', $columns) . ") VALUES (" . implode(', ', array_fill(0, count($values), '?')) . ")";
+    $query = "INSERT INTO `response` (" . implode(', ', $columns) . ") VALUES ";
+
+    // Add placeholders for each row
+    $query .= implode(', ', array_fill(0, count($values), '(' . implode(', ', array_fill(0, count($columns), '?')) . ')'));
+
+    // Flatten the values array for binding parameters
+    $flatValues = array_merge(...$values);
+
     // Create a prepared statement
     $stmt = $con->prepare($query);
 
     // Bind parameters
-    $stmt->bind_param($types, ...$values);
+    $stmt->bind_param($types, ...$flatValues);
 
     // Execute the statement
     if ($stmt->execute()) {
         // Continue processing if needed
-        echo json_encode(['status' => 'success', 'message' => $query]);
+        echo json_encode(['status' => 'success', 'message' => 'Data saved successfully']);
     } else {
         echo json_encode(['status' => 'error', 'message' => 'Failed to save data: ' . $stmt->error]);
     }

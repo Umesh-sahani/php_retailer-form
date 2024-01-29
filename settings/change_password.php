@@ -181,7 +181,7 @@ function test_input($data)
                                         </div>
                                     </div>
                                 </div>
-                                <div class="pb-5 pt-3">
+                                <div class="py-3">
                                     <button class="btn btn-success px-5" type="submit" name="change_password">Change Now</button>
                                     <a href="../dashboard.php" class="btn btn-outline-danger ml-3">Cancel</a>
                                 </div>
